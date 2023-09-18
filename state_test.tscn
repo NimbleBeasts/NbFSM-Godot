@@ -1,0 +1,181 @@
+[gd_scene load_steps=8 format=3 uid="uid://c4m31kyjnpwv7"]
+
+[ext_resource type="Script" path="res://state_test.gd" id="1_nkn22"]
+[ext_resource type="Script" path="res://NbFSM/Chart.gd" id="2_fghwd"]
+[ext_resource type="Script" path="res://NbFSM/FSM.gd" id="2_jjbyg"]
+[ext_resource type="Script" path="res://NbFSM/State.gd" id="3_as4vb"]
+[ext_resource type="Script" path="res://NbFSM/Transition.gd" id="5_g2r4e"]
+[ext_resource type="Script" path="res://NbFSM/debugger/NbChartDebugger.gd" id="6_m65mb"]
+[ext_resource type="Texture2D" uid="uid://bm4js8dgdju3s" path="res://example.png" id="7_08b3q"]
+
+[node name="StateTest" type="Node2D"]
+script = ExtResource("1_nkn22")
+
+[node name="NbChart" type="Node" parent="."]
+script = ExtResource("2_fghwd")
+
+[node name="TestFSM" type="Node" parent="NbChart" node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_jjbyg")
+initial_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="NbChart/TestFSM"]
+script = ExtResource("3_as4vb")
+
+[node name="ToA" type="Node" parent="NbChart/TestFSM/Idle" node_paths=PackedStringArray("target_state")]
+script = ExtResource("5_g2r4e")
+target_state = NodePath("../../StateA")
+
+[node name="ToB" type="Node" parent="NbChart/TestFSM/Idle" node_paths=PackedStringArray("target_state", "broadcast_state")]
+script = ExtResource("5_g2r4e")
+target_state = NodePath("../../StateB")
+broadcast_state = NodePath("../../../ParallelFSM/On")
+
+[node name="StateA" type="Node" parent="NbChart/TestFSM"]
+script = ExtResource("3_as4vb")
+
+[node name="ToIdle" type="Node" parent="NbChart/TestFSM/StateA" node_paths=PackedStringArray("target_state")]
+script = ExtResource("5_g2r4e")
+target_state = NodePath("../../Idle")
+
+[node name="StateB" type="Node" parent="NbChart/TestFSM"]
+script = ExtResource("3_as4vb")
+
+[node name="ToA" type="Node" parent="NbChart/TestFSM/StateB" node_paths=PackedStringArray("target_state", "broadcast_state")]
+script = ExtResource("5_g2r4e")
+target_state = NodePath("../../StateA")
+transition_delay = 1.0
+broadcast_state = NodePath("../../../ParallelFSM/Off")
+
+[node name="ToIdle" type="Node" parent="NbChart/TestFSM/StateB" node_paths=PackedStringArray("target_state")]
+script = ExtResource("5_g2r4e")
+target_state = NodePath("../../Idle")
+
+[node name="ParallelFSM" type="Node" parent="NbChart" node_paths=PackedStringArray("initial_state")]
+script = ExtResource("2_jjbyg")
+initial_state = NodePath("Off")
+
+[node name="Off" type="Node" parent="NbChart/ParallelFSM"]
+script = ExtResource("3_as4vb")
+
+[node name="ToOn" type="Node" parent="NbChart/ParallelFSM/Off" node_paths=PackedStringArray("target_state")]
+script = ExtResource("5_g2r4e")
+target_state = NodePath("../../On")
+
+[node name="On" type="Node" parent="NbChart/ParallelFSM"]
+script = ExtResource("3_as4vb")
+
+[node name="ToOff" type="Node" parent="NbChart/ParallelFSM/On" node_paths=PackedStringArray("target_state")]
+script = ExtResource("5_g2r4e")
+target_state = NodePath("../../Off")
+
+[node name="BtnToA" type="Button" parent="."]
+offset_left = 128.0
+offset_top = 192.0
+offset_right = 219.0
+offset_bottom = 238.0
+text = "To A"
+
+[node name="BtnToIdle" type="Button" parent="."]
+offset_left = 24.0
+offset_top = 192.0
+offset_right = 115.0
+offset_bottom = 238.0
+text = "To Idle"
+
+[node name="BtnToB" type="Button" parent="."]
+offset_left = 232.0
+offset_top = 192.0
+offset_right = 323.0
+offset_bottom = 238.0
+text = "To B"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 264.0
+offset_bottom = 48.0
+text = "Current State: Idle"
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 48.0
+offset_right = 264.0
+offset_bottom = 80.0
+text = "Processing:"
+
+[node name="Label3" type="Label" parent="."]
+offset_left = 16.0
+offset_top = 144.0
+offset_right = 264.0
+offset_bottom = 176.0
+text = "Parallel: Off"
+
+[node name="idleCounter" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 80.0
+offset_right = 152.0
+offset_bottom = 112.0
+text = "idle: 0"
+
+[node name="testCounter" type="Label" parent="."]
+offset_left = 24.0
+offset_top = 112.0
+offset_right = 144.0
+offset_bottom = 144.0
+text = "state a: 0"
+
+[node name="NbChartDebugger" type="Control" parent="." node_paths=PackedStringArray("chart")]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 552.0
+offset_top = 8.0
+offset_right = 800.0
+offset_bottom = 384.0
+script = ExtResource("6_m65mb")
+chart = NodePath("../NbChart")
+
+[node name="Panel" type="Panel" parent="NbChartDebugger"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tree" type="Tree" parent="NbChartDebugger"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Log" type="RichTextLabel" parent="NbChartDebugger"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/normal_font_size = 8
+scroll_following = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(280, 408)
+scale = Vector2(0.593023, 0.593023)
+texture = ExtResource("7_08b3q")
+
+[connection signal="state_entered" from="NbChart/TestFSM/Idle" to="." method="_on_idle_state_entered"]
+[connection signal="state_physic_processing" from="NbChart/TestFSM/Idle" to="." method="_on_idle_state_physic_processing"]
+[connection signal="state_entered" from="NbChart/TestFSM/StateA" to="." method="_on_state_a_state_entered"]
+[connection signal="state_physic_processing" from="NbChart/TestFSM/StateA" to="." method="_on_test_state_physic_processing"]
+[connection signal="state_entered" from="NbChart/TestFSM/StateB" to="." method="_on_state_b_state_entered"]
+[connection signal="state_entered" from="NbChart/ParallelFSM/Off" to="." method="_on_off_state_entered"]
+[connection signal="state_entered" from="NbChart/ParallelFSM/On" to="." method="_on_on_state_entered"]
+[connection signal="button_up" from="BtnToA" to="." method="_on_btn_to_a_button_up"]
+[connection signal="button_up" from="BtnToIdle" to="." method="_on_btn_to_idle_button_up"]
+[connection signal="button_up" from="BtnToB" to="." method="_on_btn_to_b_button_up"]
