@@ -1,6 +1,6 @@
-@icon("res://NbFSM/icons/compound_state.svg")
+@icon("res://NbFSM/icons/nbfsm.svg")
 class_name NbFSM
-extends NbBaseState
+extends NbSimpleFSM
 
 @export var initial_state: NbState = null
 
@@ -23,16 +23,20 @@ func _ready():
 		_chart = parent
 	current_state = initial_state
 	TimerNode.one_shot = true
+	@warning_ignore("return_value_discarded")
 	TimerNode.connect("timeout", Callable(self, "_timer_timeout"))
 	add_child(TimerNode)
 
-func _physics_process(delta):
+func physics_process(delta):
 	if current_state:
 		current_state.physic_processing(delta)
 
+func process(delta):
+	if current_state:
+		current_state.processing(delta)
 
 func state_change(target: NbState, disable_broadcast = false):
-	var blob = current_state._state_change(target)
+	var blob = current_state._get_transition(target)
 	
 	if blob[BlobDataType.ERROR] == OK:
 		var wait_time = blob[BlobDataType.DELAY]

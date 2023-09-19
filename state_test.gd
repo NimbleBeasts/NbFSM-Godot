@@ -10,8 +10,8 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	$NbChart/TestFSM.process(delta)
-
+	$NbChart/TestFSM.physics_process(delta)
+	$NbChart/ParallelFSM.process(delta)
 
 
 func _on_idle_state_entered():

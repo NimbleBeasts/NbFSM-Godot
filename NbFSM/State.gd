@@ -1,6 +1,6 @@
-@icon("res://NbFSM/icons/atomic_state.svg")
+@icon("res://NbFSM/icons/nbstate.svg")
 class_name NbState 
-extends NbBaseState
+extends NbSimpleFSM
 
 signal state_entered()
 signal state_exited()
@@ -18,7 +18,7 @@ func _ready():
 			_transitions.append(child)
 
 
-func _state_change(target: NbState) -> Array:
+func _get_transition(target: NbState) -> Array:
 	for transition in _transitions:
 		if transition.target_state == target:
 			return [OK, transition.transition_delay, transition.broadcast_state]
@@ -26,16 +26,21 @@ func _state_change(target: NbState) -> Array:
 
 
 func state_enter():
+	@warning_ignore("return_value_discarded")
 	emit_signal("state_entered")
 	
 func state_exit():
+	@warning_ignore("return_value_discarded")
 	emit_signal("state_exited")
 	
 func physic_processing(delta):
+	@warning_ignore("return_value_discarded")
 	emit_signal("state_physic_processing", delta)
 	
 func processing(delta):
+	@warning_ignore("return_value_discarded")
 	emit_signal("state_processing", delta)
 	
 func input(event):
+	@warning_ignore("return_value_discarded")
 	emit_signal("state_input", event)

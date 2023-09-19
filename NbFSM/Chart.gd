@@ -1,16 +1,10 @@
-@icon("res://NbFSM/icons/state_chart.svg")
+@icon("res://NbFSM/icons/nbchart.svg")
 class_name NbChart
-extends NbBaseState
+extends NbSimpleFSM
 
-
-# Features:
-#  -[x] FSM
-#  -[ ] Parallel states
-#  -[ ] Animation sync
-#  -[ ] Delay
 
 var history: Array[String] = []
 
-func error(error_string: String):
-	history.append(error_string)
-	printerr(error_string)
+func error(error_msg: String):
+	history.append(error_msg)
+	printerr(error_msg)

@@ -3,7 +3,6 @@ extends Control
 @export var chart: NbChart = null
 @export var update_interval: float = 0.1
 
-var _machines = []
 var time = 0
 
 func _ready():

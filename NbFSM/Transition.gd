@@ -1,7 +1,8 @@
-@icon("res://NbFSM/icons/transition.svg")
+@icon("res://NbFSM/icons/nbtrans.svg")
 class_name NbTransition
-extends NbBaseState
+extends NbSimpleFSM
 
+signal state_transition()
 
 @export var target_state: NbState = null ## Target state of transition
 @export var transition_delay: float = 0.0 ## Delay transition
