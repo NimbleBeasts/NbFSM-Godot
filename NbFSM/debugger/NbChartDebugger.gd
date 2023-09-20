@@ -1,14 +1,28 @@
 extends Control
 
-@export var chart: NbChart = null
+@export var linked_chart: NbChart = null
+@export var chart_within_node: Node = null
 @export var update_interval: float = 0.1
 
+var chart: NbChart = null
 var time = 0
 
 func _ready():
-	if chart == null:
-		printerr("NbChartDebugger: No chart to watch is set")
-		return
+	if linked_chart != null:
+		chart = linked_chart
+	else:
+		if chart_within_node == null:
+			printerr("NbChartDebugger: No chart to watch is set")
+			return
+		else:
+			for child in chart_within_node.get_children():
+				if child is NbChart:
+					chart = child
+					break
+			if chart == null:
+				printerr("NbChartDebugger: No chart in child found")
+				return
+	
 	
 	update_debugger()
 

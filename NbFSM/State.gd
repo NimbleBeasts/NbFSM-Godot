@@ -4,8 +4,8 @@ extends NbSimpleFSM
 
 signal state_entered()
 signal state_exited()
-signal state_physic_processing(delta)
-signal state_processing(delta)
+signal state_physics_process(delta)
+signal state_process(delta)
 signal state_input(event)
 
 var _transitions: Array[NbTransition] = []
@@ -35,11 +35,11 @@ func state_exit():
 	
 func physic_processing(delta):
 	@warning_ignore("return_value_discarded")
-	emit_signal("state_physic_processing", delta)
+	emit_signal("state_physics_process", delta)
 	
 func processing(delta):
 	@warning_ignore("return_value_discarded")
-	emit_signal("state_processing", delta)
+	emit_signal("state_process", delta)
 	
 func input(event):
 	@warning_ignore("return_value_discarded")

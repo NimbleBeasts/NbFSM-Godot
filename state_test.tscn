@@ -5,8 +5,8 @@
 [ext_resource type="Script" path="res://NbFSM/FSM.gd" id="2_jjbyg"]
 [ext_resource type="Script" path="res://NbFSM/State.gd" id="3_as4vb"]
 [ext_resource type="Script" path="res://NbFSM/Transition.gd" id="5_g2r4e"]
-[ext_resource type="Script" path="res://NbFSM/debugger/NbChartDebugger.gd" id="6_m65mb"]
 [ext_resource type="Texture2D" uid="uid://bm4js8dgdju3s" path="res://example.png" id="7_08b3q"]
+[ext_resource type="PackedScene" uid="uid://6hq7pu5dor1f" path="res://NbFSM/debugger/NbChartDebugger.tscn" id="7_urfaw"]
 
 [node name="StateTest" type="Node2D"]
 script = ExtResource("1_nkn22")
@@ -124,55 +124,19 @@ offset_right = 144.0
 offset_bottom = 144.0
 text = "state a: 0"
 
-[node name="NbChartDebugger" type="Control" parent="." node_paths=PackedStringArray("chart")]
-layout_mode = 3
-anchors_preset = 0
-offset_left = 552.0
-offset_top = 8.0
-offset_right = 800.0
-offset_bottom = 384.0
-script = ExtResource("6_m65mb")
-chart = NodePath("../NbChart")
-
-[node name="Panel" type="Panel" parent="NbChartDebugger"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Tree" type="Tree" parent="NbChartDebugger"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_bottom = -88.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Log" type="RichTextLabel" parent="NbChartDebugger"]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -88.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_font_sizes/normal_font_size = 8
-scroll_following = true
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(280, 408)
 scale = Vector2(0.593023, 0.593023)
 texture = ExtResource("7_08b3q")
 
+[node name="NbChartDebugger" parent="." node_paths=PackedStringArray("linked_chart") instance=ExtResource("7_urfaw")]
+linked_chart = NodePath("../NbChart")
+
 [connection signal="state_entered" from="NbChart/TestFSM/Idle" to="." method="_on_idle_state_entered"]
-[connection signal="state_physic_processing" from="NbChart/TestFSM/Idle" to="." method="_on_idle_state_physic_processing"]
+[connection signal="state_physics_process" from="NbChart/TestFSM/Idle" to="." method="_on_idle_state_physics_process"]
 [connection signal="state_entered" from="NbChart/TestFSM/StateA" to="." method="_on_state_a_state_entered"]
-[connection signal="state_physic_processing" from="NbChart/TestFSM/StateA" to="." method="_on_test_state_physic_processing"]
+[connection signal="state_physics_process" from="NbChart/TestFSM/StateA" to="." method="_on_state_a_state_physics_process"]
 [connection signal="state_entered" from="NbChart/TestFSM/StateB" to="." method="_on_state_b_state_entered"]
 [connection signal="state_entered" from="NbChart/ParallelFSM/Off" to="." method="_on_off_state_entered"]
 [connection signal="state_entered" from="NbChart/ParallelFSM/On" to="." method="_on_on_state_entered"]

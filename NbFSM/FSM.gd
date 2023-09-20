@@ -35,7 +35,13 @@ func process(delta):
 	if current_state:
 		current_state.processing(delta)
 
+func transition(target: NbState, disable_broadcast = false):
+	state_change(target, disable_broadcast)
+
 func state_change(target: NbState, disable_broadcast = false):
+	if current_state.name == target.name:
+		return
+	
 	var blob = current_state._get_transition(target)
 	
 	if blob[BlobDataType.ERROR] == OK:

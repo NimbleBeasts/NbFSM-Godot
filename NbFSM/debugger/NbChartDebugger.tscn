@@ -1,0 +1,41 @@
+[gd_scene load_steps=2 format=3 uid="uid://6hq7pu5dor1f"]
+
+[ext_resource type="Script" path="res://NbFSM/debugger/NbChartDebugger.gd" id="1_nt5ou"]
+
+[node name="NbChartDebugger" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 552.0
+offset_top = 8.0
+offset_right = 800.0
+offset_bottom = 384.0
+script = ExtResource("1_nt5ou")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Tree" type="Tree" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Log" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/normal_font_size = 8
+scroll_following = true

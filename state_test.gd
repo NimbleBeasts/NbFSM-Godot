@@ -19,13 +19,13 @@ func _on_idle_state_entered():
 
 
 
-func _on_idle_state_physic_processing(delta):
+func _on_idle_state_physics_process(delta):
 	counterIdle += delta
 	$idleCounter.set_text("idle: " + str(counterIdle))
 	
 
 
-func _on_test_state_physic_processing(delta):
+func _on_state_a_state_physics_process(delta):
 	counterTest += delta
 	$testCounter.set_text("state a: " + str(counterTest))
 
