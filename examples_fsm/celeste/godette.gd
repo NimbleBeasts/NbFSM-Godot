@@ -6,7 +6,7 @@ const GRAVITY: float = 2100.0
 const JUMP_HEIGHT: float = 36000.0
 const ACCELERATION = 3000
 const DASH_SPEED = Vector2(50000,50000)
-const DASH_TIME_MAX = 40
+const DASH_TIME_MAX = 10
 
 const AGILITY_GROUND: float = 1.0
 const AGILITY_AIR: float = 0.3
@@ -122,6 +122,7 @@ func _on_air_state_physics_process(delta):
 			velocity = input_last.normalized() * DASH_SPEED * delta
 			animationState.travel("dash")
 			fsm.transition(state_dash)
+			return
 
 	move(delta, AGILITY_AIR)
 	
