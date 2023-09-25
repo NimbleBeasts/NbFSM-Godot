@@ -23,6 +23,9 @@ var can_dash: bool = true
 var is_dashing: bool = false
 var dash_time: float = 0
 
+@export var ShadeNode: PackedScene
+@export var DustNode: PackedScene
+
 @onready var fsm: NbFSM = $NbChart/GodetteFSM
 @onready var state_ground: NbState = $NbChart/GodetteFSM/ground
 @onready var state_air: NbState = $NbChart/GodetteFSM/air
@@ -92,7 +95,11 @@ func _on_jump_state_physic_processing(delta):
 func _on_walk_state_physic_processing(delta):
 	velocity.x = (velocity.x + ACCELERATION * input.x * delta)
 
-
+func dust():
+	if DustNode:
+		var dust = DustNode.instantiate()
+		dust.global_position = global_position - Vector2(0, 24)
+		get_parent().add_child(dust)
 
 
 func _on_ground_state_physics_process(delta):
@@ -104,6 +111,7 @@ func _on_ground_state_physics_process(delta):
 	if Input.is_action_just_pressed("jump"):
 		velocity.y = -JUMP_HEIGHT * delta
 		animationState.travel("jump_pre")
+		dust()
 		return
 
 	if abs(velocity.x) > 10:
@@ -116,6 +124,7 @@ func _on_air_state_physics_process(delta):
 	if is_on_floor():
 		fsm.transition(state_ground)
 		animationState.travel("jump_end")
+		dust()
 
 	if Input.is_action_just_pressed("dash"):
 		if can_dash and input_last != Vector2.ZERO:
@@ -130,10 +139,17 @@ func _on_air_state_physics_process(delta):
 
 func _on_dash_state_physics_process(delta):
 	dash_time += 100 * delta
+
 	
 	if dash_time >= DASH_TIME_MAX:
 		dash_time = 0
 		fsm.transition(state_air)
+	
+	if int(dash_time) % 3:
+		if ShadeNode:
+			var shade = ShadeNode.instantiate()
+			shade.global_position = global_position
+			get_parent().add_child(shade)
 
 
 func _on_wall_state_physics_process(delta):
@@ -158,3 +174,11 @@ func _on_dash_state_entered():
 
 func _on_dash_state_exited():
 	is_dashing = false
+
+
+func _on_dash_available_state_entered():
+	$flip/Sprite2D.modulate = Color.WHITE
+
+
+func _on_dash_spended_state_entered():
+	$flip/Sprite2D.modulate = Color("#a1b7bf")

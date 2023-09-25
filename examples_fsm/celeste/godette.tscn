@@ -1,7 +1,9 @@
-[gd_scene load_steps=42 format=3 uid="uid://dkqbdg2r7vs3"]
+[gd_scene load_steps=44 format=3 uid="uid://dkqbdg2r7vs3"]
 
 [ext_resource type="Texture2D" uid="uid://bav14uxaprn6" path="res://examples_fsm/celeste/art/godette.png" id="1_a6vj7"]
 [ext_resource type="Script" path="res://examples_fsm/celeste/godette.gd" id="1_obuan"]
+[ext_resource type="PackedScene" uid="uid://dwhltcvwk76j" path="res://examples_fsm/celeste/art/shade.tscn" id="2_en34j"]
+[ext_resource type="PackedScene" uid="uid://0avgfig1k8j8" path="res://examples_fsm/celeste/art/dust.tscn" id="3_058ex"]
 [ext_resource type="Script" path="res://NbFSM/Chart.gd" id="3_xsada"]
 [ext_resource type="Script" path="res://NbFSM/FSM.gd" id="4_i2syy"]
 [ext_resource type="Script" path="res://NbFSM/State.gd" id="5_ycp1b"]
@@ -364,6 +366,8 @@ graph_offset = Vector2(0, 74.8069)
 [node name="godette" type="CharacterBody2D"]
 texture_filter = 1
 script = ExtResource("1_obuan")
+ShadeNode = ExtResource("2_en34j")
+DustNode = ExtResource("3_058ex")
 
 [node name="flip" type="Node2D" parent="."]
 
@@ -393,6 +397,7 @@ anim_player = NodePath("../AnimationPlayer")
 active = true
 
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_left = -32.0
 offset_top = -104.0
 offset_right = 8.0
@@ -419,13 +424,15 @@ script = ExtResource("5_ycp1b")
 script = ExtResource("6_x4ifb")
 target_state = NodePath("../../wall")
 
-[node name="toGround" type="Node" parent="NbChart/GodetteFSM/air" node_paths=PackedStringArray("target_state")]
+[node name="toGround" type="Node" parent="NbChart/GodetteFSM/air" node_paths=PackedStringArray("target_state", "broadcast_state")]
 script = ExtResource("6_x4ifb")
 target_state = NodePath("../../ground")
+broadcast_state = NodePath("../../../ParallelFSM/DashAvailable")
 
-[node name="toDash" type="Node" parent="NbChart/GodetteFSM/air" node_paths=PackedStringArray("target_state")]
+[node name="toDash" type="Node" parent="NbChart/GodetteFSM/air" node_paths=PackedStringArray("target_state", "broadcast_state")]
 script = ExtResource("6_x4ifb")
 target_state = NodePath("../../dash")
+broadcast_state = NodePath("../../../ParallelFSM/DashSpended")
 
 [node name="dash" type="Node" parent="NbChart/GodetteFSM"]
 script = ExtResource("5_ycp1b")
@@ -441,13 +448,32 @@ target_state = NodePath("../../wall")
 [node name="wall" type="Node" parent="NbChart/GodetteFSM"]
 script = ExtResource("5_ycp1b")
 
-[node name="toGround" type="Node" parent="NbChart/GodetteFSM/wall" node_paths=PackedStringArray("target_state")]
+[node name="toGround" type="Node" parent="NbChart/GodetteFSM/wall" node_paths=PackedStringArray("target_state", "broadcast_state")]
 script = ExtResource("6_x4ifb")
 target_state = NodePath("../../ground")
+broadcast_state = NodePath("../../../ParallelFSM/DashAvailable")
 
 [node name="toAir" type="Node" parent="NbChart/GodetteFSM/wall" node_paths=PackedStringArray("target_state")]
 script = ExtResource("6_x4ifb")
 target_state = NodePath("../../air")
+
+[node name="ParallelFSM" type="Node" parent="NbChart" node_paths=PackedStringArray("initial_state")]
+script = ExtResource("4_i2syy")
+initial_state = NodePath("DashAvailable")
+
+[node name="DashAvailable" type="Node" parent="NbChart/ParallelFSM"]
+script = ExtResource("5_ycp1b")
+
+[node name="ToSpended" type="Node" parent="NbChart/ParallelFSM/DashAvailable" node_paths=PackedStringArray("target_state")]
+script = ExtResource("6_x4ifb")
+target_state = NodePath("../../DashSpended")
+
+[node name="DashSpended" type="Node" parent="NbChart/ParallelFSM"]
+script = ExtResource("5_ycp1b")
+
+[node name="ToAvailable" type="Node" parent="NbChart/ParallelFSM/DashSpended" node_paths=PackedStringArray("target_state")]
+script = ExtResource("6_x4ifb")
+target_state = NodePath("../../DashAvailable")
 
 [connection signal="state_entered" from="NbChart/GodetteFSM/ground" to="." method="_on_ground_state_entered"]
 [connection signal="state_physics_process" from="NbChart/GodetteFSM/ground" to="." method="_on_ground_state_physics_process"]
@@ -458,3 +484,5 @@ target_state = NodePath("../../air")
 [connection signal="state_exited" from="NbChart/GodetteFSM/dash" to="." method="_on_dash_state_exited"]
 [connection signal="state_physics_process" from="NbChart/GodetteFSM/dash" to="." method="_on_dash_state_physics_process"]
 [connection signal="state_physics_process" from="NbChart/GodetteFSM/wall" to="." method="_on_wall_state_physics_process"]
+[connection signal="state_entered" from="NbChart/ParallelFSM/DashAvailable" to="." method="_on_dash_available_state_entered"]
+[connection signal="state_entered" from="NbChart/ParallelFSM/DashSpended" to="." method="_on_dash_spended_state_entered"]

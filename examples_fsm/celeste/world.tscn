@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bqcfepikjq2oc"]
+[gd_scene load_steps=9 format=3 uid="uid://bqcfepikjq2oc"]
 
 [ext_resource type="Texture2D" uid="uid://bexo75adlimar" path="res://examples_fsm/celeste/art/tileset.png" id="1_evqxn"]
 [ext_resource type="Script" path="res://examples_fsm/celeste/world.gd" id="1_vmqun"]
 [ext_resource type="PackedScene" uid="uid://dkqbdg2r7vs3" path="res://examples_fsm/celeste/godette.tscn" id="2_tgs86"]
 [ext_resource type="PackedScene" uid="uid://6hq7pu5dor1f" path="res://NbFSM/debugger/NbChartDebugger.tscn" id="2_yg534"]
+[ext_resource type="Texture2D" uid="uid://dnmtc57noruxv" path="res://examples_fsm/celeste/art/particle.png" id="5_sqcy1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4iwrw"]
 texture = ExtResource("1_evqxn")
@@ -206,6 +207,17 @@ physics_layer_1/collision_layer = 2
 physics_layer_1/collision_mask = 2
 sources/0 = SubResource("TileSetAtlasSource_4iwrw")
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_jw0tn"]
+emission_shape = 3
+emission_box_extents = Vector3(1, 260, 1)
+particle_flag_disable_z = true
+direction = Vector3(-1, 0, 0)
+gravity = Vector3(-96, 0, 0)
+initial_velocity_max = 129.03
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_max = 2.0
+
 [node name="world" type="Node2D"]
 texture_filter = 1
 script = ExtResource("1_vmqun")
@@ -216,7 +228,6 @@ offset_bottom = 552.0
 color = Color(0.0823529, 0.172549, 0.215686, 1)
 
 [node name="TileMap" type="TileMap" parent="."]
-position = Vector2(24, -528)
 scale = Vector2(3, 3)
 tile_set = SubResource("TileSet_3atns")
 format = 2
@@ -233,8 +244,16 @@ chart_within_node = NodePath("../godette")
 position = Vector2(96, 352)
 
 [node name="Label" type="Label" parent="."]
-offset_left = 448.0
-offset_top = 128.0
-offset_right = 552.0
-offset_bottom = 168.0
+offset_left = 696.0
+offset_top = 416.0
+offset_right = 800.0
+offset_bottom = 456.0
 text = "Animation: "
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="."]
+position = Vector2(960, 288)
+amount = 256
+process_material = SubResource("ParticleProcessMaterial_jw0tn")
+texture = ExtResource("5_sqcy1")
+lifetime = 4.0
+speed_scale = 1.5
