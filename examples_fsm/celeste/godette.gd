@@ -5,7 +5,7 @@ const MAX_SPEED: Vector2 = Vector2(450, 900)
 const GRAVITY: float = 2100.0
 const JUMP_HEIGHT: float = 36000.0
 const ACCELERATION = 3000
-const DASH_SPEED = Vector2(50000,50000)
+const DASH_SPEED = Vector2(75000,75000)
 const DASH_TIME_MAX = 10
 
 const AGILITY_GROUND: float = 1.0
@@ -41,13 +41,8 @@ func _physics_process(delta):
 	# Get player input
 	_get_input()
 
-
 	# State processing
 	fsm.physics_process(delta)
-	
-	# Apply gravity
-	if velocity.y <= MAX_SPEED.y and not is_dashing:
-		velocity.y += GRAVITY * delta
 
 	# Direction
 	if input.x < 0:
@@ -57,6 +52,8 @@ func _physics_process(delta):
 
 	# Perform movement
 	move_and_slide()
+	
+	$Label.set_text(str(velocity))
 
 
 func _on_idle_state_physic_processing(delta):
@@ -83,9 +80,17 @@ func move(delta: float, agility: float):
 		
 	else:
 		velocity.x = move_toward(velocity.x, 0, ACCELERATION * delta)
-	$Label.set_text(str(input) + "\n" + str(velocity))
+	
+	
+	
 
 
+func gravity(delta: float):
+	# Apply gravity
+	if velocity.y <= MAX_SPEED.y and not is_dashing:
+		velocity.y += GRAVITY * delta
+	
+	
 
 
 func _on_jump_state_physic_processing(delta):
@@ -125,6 +130,9 @@ func _on_air_state_physics_process(delta):
 		fsm.transition(state_ground)
 		animationState.travel("jump_end")
 		dust()
+	if $flip/RayCast2D.is_colliding():
+		fsm.transition(state_wall)
+		animationState.travel("wall")
 
 	if Input.is_action_just_pressed("dash"):
 		if can_dash and input_last != Vector2.ZERO:
@@ -134,15 +142,16 @@ func _on_air_state_physics_process(delta):
 			return
 
 	move(delta, AGILITY_AIR)
+	gravity(delta)
 	
 
 
 func _on_dash_state_physics_process(delta):
 	dash_time += 100 * delta
 
-	
 	if dash_time >= DASH_TIME_MAX:
 		dash_time = 0
+		velocity = Vector2(0, 0)
 		fsm.transition(state_air)
 	
 	if int(dash_time) % 3:
@@ -150,11 +159,23 @@ func _on_dash_state_physics_process(delta):
 			var shade = ShadeNode.instantiate()
 			shade.global_position = global_position
 			get_parent().add_child(shade)
-
+	gravity(delta)
 
 func _on_wall_state_physics_process(delta):
-	pass # Replace with function body.
-
+	if not $flip/RayCast2D.is_colliding():
+		animationState.travel("jump")
+		fsm.transition(state_air)
+		return
+	
+	if is_on_floor():
+		fsm.transition(state_ground)
+		return
+	
+	if Input.is_action_just_pressed("jump"):
+		velocity.y = -JUMP_HEIGHT * delta * 0.8
+		velocity.x = -$flip.scale.x * JUMP_HEIGHT/2 * delta
+		animationState.travel("jump_pre")
+		return
 
 func _on_air_state_entered():
 	is_in_air = true
@@ -182,3 +203,7 @@ func _on_dash_available_state_entered():
 
 func _on_dash_spended_state_entered():
 	$flip/Sprite2D.modulate = Color("#a1b7bf")
+
+
+func _on_wall_state_entered():
+	velocity = Vector2(0, 0)

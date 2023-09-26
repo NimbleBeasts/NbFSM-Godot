@@ -379,7 +379,7 @@ hframes = 11
 
 [node name="RayCast2D" type="RayCast2D" parent="flip"]
 position = Vector2(0, -24)
-target_position = Vector2(24, 0)
+target_position = Vector2(16, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false
@@ -483,6 +483,7 @@ target_state = NodePath("../../DashAvailable")
 [connection signal="state_entered" from="NbChart/GodetteFSM/dash" to="." method="_on_dash_state_entered"]
 [connection signal="state_exited" from="NbChart/GodetteFSM/dash" to="." method="_on_dash_state_exited"]
 [connection signal="state_physics_process" from="NbChart/GodetteFSM/dash" to="." method="_on_dash_state_physics_process"]
+[connection signal="state_entered" from="NbChart/GodetteFSM/wall" to="." method="_on_wall_state_entered"]
 [connection signal="state_physics_process" from="NbChart/GodetteFSM/wall" to="." method="_on_wall_state_physics_process"]
 [connection signal="state_entered" from="NbChart/ParallelFSM/DashAvailable" to="." method="_on_dash_available_state_entered"]
 [connection signal="state_entered" from="NbChart/ParallelFSM/DashSpended" to="." method="_on_dash_spended_state_entered"]
