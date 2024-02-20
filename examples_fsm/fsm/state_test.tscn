@@ -1,71 +1,71 @@
-[gd_scene load_steps=8 format=3 uid="uid://c4m31kyjnpwv7"]
+[gd_scene load_steps=8 format=3 uid="uid://3yr2u6an84d1"]
 
-[ext_resource type="Script" path="res://state_test.gd" id="1_nkn22"]
-[ext_resource type="Script" path="res://NbFSM/Chart.gd" id="2_fghwd"]
-[ext_resource type="Script" path="res://NbFSM/FSM.gd" id="2_jjbyg"]
-[ext_resource type="Script" path="res://NbFSM/State.gd" id="3_as4vb"]
-[ext_resource type="Script" path="res://NbFSM/Transition.gd" id="5_g2r4e"]
-[ext_resource type="Texture2D" uid="uid://bm4js8dgdju3s" path="res://example.png" id="7_08b3q"]
-[ext_resource type="PackedScene" uid="uid://6hq7pu5dor1f" path="res://NbFSM/debugger/NbChartDebugger.tscn" id="7_urfaw"]
+[ext_resource type="Script" path="res://examples_fsm/fsm/state_test.gd" id="1_bvqxa"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/Chart.gd" id="2_quft0"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/FSM.gd" id="3_lpl16"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/State.gd" id="4_hqtmm"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/Transition.gd" id="5_uctjm"]
+[ext_resource type="Texture2D" uid="uid://bm4js8dgdju3s" path="res://manuals/NbSimplerFSM/example.png" id="6_lhatp"]
+[ext_resource type="PackedScene" uid="uid://6hq7pu5dor1f" path="res://addons/NbSimpleFSM/debugger/NbChartDebugger.tscn" id="7_rmdrn"]
 
 [node name="StateTest" type="Node2D"]
-script = ExtResource("1_nkn22")
+script = ExtResource("1_bvqxa")
 
 [node name="NbChart" type="Node" parent="."]
-script = ExtResource("2_fghwd")
+script = ExtResource("2_quft0")
 
 [node name="TestFSM" type="Node" parent="NbChart" node_paths=PackedStringArray("initial_state")]
-script = ExtResource("2_jjbyg")
+script = ExtResource("3_lpl16")
 initial_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="NbChart/TestFSM"]
-script = ExtResource("3_as4vb")
+script = ExtResource("4_hqtmm")
 
 [node name="ToA" type="Node" parent="NbChart/TestFSM/Idle" node_paths=PackedStringArray("target_state")]
-script = ExtResource("5_g2r4e")
+script = ExtResource("5_uctjm")
 target_state = NodePath("../../StateA")
 
 [node name="ToB" type="Node" parent="NbChart/TestFSM/Idle" node_paths=PackedStringArray("target_state", "broadcast_state")]
-script = ExtResource("5_g2r4e")
+script = ExtResource("5_uctjm")
 target_state = NodePath("../../StateB")
 broadcast_state = NodePath("../../../ParallelFSM/On")
 
 [node name="StateA" type="Node" parent="NbChart/TestFSM"]
-script = ExtResource("3_as4vb")
+script = ExtResource("4_hqtmm")
 
 [node name="ToIdle" type="Node" parent="NbChart/TestFSM/StateA" node_paths=PackedStringArray("target_state")]
-script = ExtResource("5_g2r4e")
+script = ExtResource("5_uctjm")
 target_state = NodePath("../../Idle")
 
 [node name="StateB" type="Node" parent="NbChart/TestFSM"]
-script = ExtResource("3_as4vb")
+script = ExtResource("4_hqtmm")
 
 [node name="ToA" type="Node" parent="NbChart/TestFSM/StateB" node_paths=PackedStringArray("target_state", "broadcast_state")]
-script = ExtResource("5_g2r4e")
+script = ExtResource("5_uctjm")
 target_state = NodePath("../../StateA")
 transition_delay = 1.0
 broadcast_state = NodePath("../../../ParallelFSM/Off")
 
 [node name="ToIdle" type="Node" parent="NbChart/TestFSM/StateB" node_paths=PackedStringArray("target_state")]
-script = ExtResource("5_g2r4e")
+script = ExtResource("5_uctjm")
 target_state = NodePath("../../Idle")
 
 [node name="ParallelFSM" type="Node" parent="NbChart" node_paths=PackedStringArray("initial_state")]
-script = ExtResource("2_jjbyg")
+script = ExtResource("3_lpl16")
 initial_state = NodePath("Off")
 
 [node name="Off" type="Node" parent="NbChart/ParallelFSM"]
-script = ExtResource("3_as4vb")
+script = ExtResource("4_hqtmm")
 
 [node name="ToOn" type="Node" parent="NbChart/ParallelFSM/Off" node_paths=PackedStringArray("target_state")]
-script = ExtResource("5_g2r4e")
+script = ExtResource("5_uctjm")
 target_state = NodePath("../../On")
 
 [node name="On" type="Node" parent="NbChart/ParallelFSM"]
-script = ExtResource("3_as4vb")
+script = ExtResource("4_hqtmm")
 
 [node name="ToOff" type="Node" parent="NbChart/ParallelFSM/On" node_paths=PackedStringArray("target_state")]
-script = ExtResource("5_g2r4e")
+script = ExtResource("5_uctjm")
 target_state = NodePath("../../Off")
 
 [node name="BtnToA" type="Button" parent="."]
@@ -128,9 +128,9 @@ text = "state a: 0"
 texture_filter = 1
 position = Vector2(280, 408)
 scale = Vector2(0.593023, 0.593023)
-texture = ExtResource("7_08b3q")
+texture = ExtResource("6_lhatp")
 
-[node name="NbChartDebugger" parent="." node_paths=PackedStringArray("linked_chart") instance=ExtResource("7_urfaw")]
+[node name="NbChartDebugger" parent="." node_paths=PackedStringArray("linked_chart") instance=ExtResource("7_rmdrn")]
 linked_chart = NodePath("../NbChart")
 
 [connection signal="state_entered" from="NbChart/TestFSM/Idle" to="." method="_on_idle_state_entered"]

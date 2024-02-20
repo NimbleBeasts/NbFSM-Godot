@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://davuxb37xs6ap"
-path="res://.godot/imported/nbstate.svg-023d3cbaec8d45a6a1dd2d9d3b7af706.ctex"
+path="res://.godot/imported/nbstate.svg-178319003bf382fd635a30caaf86f2fd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://NbFSM/icons/nbstate.svg"
-dest_files=["res://.godot/imported/nbstate.svg-023d3cbaec8d45a6a1dd2d9d3b7af706.ctex"]
+source_file="res://addons/NbSimpleFSM/icons/nbstate.svg"
+dest_files=["res://.godot/imported/nbstate.svg-178319003bf382fd635a30caaf86f2fd.ctex"]
 
 [params]
 

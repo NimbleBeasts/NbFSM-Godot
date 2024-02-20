@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://bexo75adlimar" path="res://examples_fsm/celeste/art/tileset.png" id="1_evqxn"]
 [ext_resource type="Script" path="res://examples_fsm/celeste/world.gd" id="1_vmqun"]
 [ext_resource type="PackedScene" uid="uid://dkqbdg2r7vs3" path="res://examples_fsm/celeste/godette.tscn" id="2_tgs86"]
-[ext_resource type="PackedScene" uid="uid://6hq7pu5dor1f" path="res://NbFSM/debugger/NbChartDebugger.tscn" id="2_yg534"]
+[ext_resource type="PackedScene" uid="uid://6hq7pu5dor1f" path="res://addons/NbSimpleFSM/debugger/NbChartDebugger.tscn" id="2_yg534"]
 [ext_resource type="Texture2D" uid="uid://dnmtc57noruxv" path="res://examples_fsm/celeste/art/particle.png" id="5_sqcy1"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4iwrw"]

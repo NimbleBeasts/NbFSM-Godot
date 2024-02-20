@@ -1,4 +1,4 @@
-@icon("res://NbFSM/icons/nbchart.svg")
+@icon("./icons/nbchart.svg")
 class_name NbChart
 extends NbSimpleFSM
 

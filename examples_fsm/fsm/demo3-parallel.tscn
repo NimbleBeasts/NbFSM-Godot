@@ -1,0 +1,74 @@
+[gd_scene load_steps=7 format=3 uid="uid://s73ql76noopk"]
+
+[ext_resource type="Script" path="res://examples_fsm/fsm/demo1-simple.gd" id="1_m76qk"]
+[ext_resource type="PackedScene" uid="uid://6hq7pu5dor1f" path="res://addons/NbSimpleFSM/debugger/NbChartDebugger.tscn" id="2_xstb3"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/Chart.gd" id="3_ty8ce"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/FSM.gd" id="4_bc652"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/State.gd" id="5_tddt4"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/Transition.gd" id="6_fvecu"]
+
+[node name="demo1-simple" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m76qk")
+
+[node name="ButtonOn" type="Button" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 64.0
+offset_right = 192.0
+offset_bottom = 128.0
+text = "On"
+
+[node name="ButtonOff" type="Button" parent="."]
+layout_mode = 0
+offset_left = 256.0
+offset_top = 64.0
+offset_right = 384.0
+offset_bottom = 128.0
+text = "Off"
+
+[node name="NbChartDebugger" parent="." node_paths=PackedStringArray("linked_chart") instance=ExtResource("2_xstb3")]
+offset_left = 448.0
+offset_top = 16.0
+offset_right = 696.0
+offset_bottom = 392.0
+linked_chart = NodePath("../NbChart")
+
+[node name="StateLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 64.0
+offset_top = 160.0
+offset_right = 384.0
+offset_bottom = 208.0
+text = "State is: Off"
+
+[node name="NbChart" type="Node" parent="."]
+script = ExtResource("3_ty8ce")
+
+[node name="NbFSM" type="Node" parent="NbChart" node_paths=PackedStringArray("initial_state")]
+script = ExtResource("4_bc652")
+initial_state = NodePath("StateOff")
+
+[node name="StateOff" type="Node" parent="NbChart/NbFSM"]
+script = ExtResource("5_tddt4")
+
+[node name="ToOn" type="Node" parent="NbChart/NbFSM/StateOff" node_paths=PackedStringArray("target_state")]
+script = ExtResource("6_fvecu")
+target_state = NodePath("../../StateOn")
+
+[node name="StateOn" type="Node" parent="NbChart/NbFSM"]
+script = ExtResource("5_tddt4")
+
+[node name="ToOff" type="Node" parent="NbChart/NbFSM/StateOn" node_paths=PackedStringArray("target_state")]
+script = ExtResource("6_fvecu")
+target_state = NodePath("../../StateOff")
+
+[connection signal="button_up" from="ButtonOn" to="." method="_on_button_on_button_up"]
+[connection signal="button_up" from="ButtonOff" to="." method="_on_button_off_button_up"]
+[connection signal="state_entered" from="NbChart/NbFSM/StateOff" to="." method="_on_state_off_state_entered"]
+[connection signal="state_entered" from="NbChart/NbFSM/StateOn" to="." method="_on_state_on_state_entered"]

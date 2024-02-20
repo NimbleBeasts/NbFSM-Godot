@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://6hq7pu5dor1f"]
 
-[ext_resource type="Script" path="res://NbFSM/debugger/NbChartDebugger.gd" id="1_nt5ou"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/debugger/NbChartDebugger.gd" id="1_nt5ou"]
 
 [node name="NbChartDebugger" type="Control"]
 layout_mode = 3

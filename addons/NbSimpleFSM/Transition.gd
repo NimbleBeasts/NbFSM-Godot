@@ -1,4 +1,4 @@
-@icon("res://NbFSM/icons/nbtrans.svg")
+@icon("./icons/nbtrans.svg")
 class_name NbTransition
 extends NbSimpleFSM
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dmdhxvcoes8xm"
-path="res://.godot/imported/nbfsm.svg-cacec54042bbae3067f94a84a491e9d4.ctex"
+uid="uid://cta271opwr5j6"
+path="res://.godot/imported/nbtrans.svg-5168868f58ef713f1aedbd6b7013e44f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://NbFSM/icons/nbfsm.svg"
-dest_files=["res://.godot/imported/nbfsm.svg-cacec54042bbae3067f94a84a491e9d4.ctex"]
+source_file="res://addons/NbSimpleFSM/icons/nbtrans.svg"
+dest_files=["res://.godot/imported/nbtrans.svg-5168868f58ef713f1aedbd6b7013e44f.ctex"]
 
 [params]
 

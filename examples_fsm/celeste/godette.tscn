@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://examples_fsm/celeste/godette.gd" id="1_obuan"]
 [ext_resource type="PackedScene" uid="uid://dwhltcvwk76j" path="res://examples_fsm/celeste/art/shade.tscn" id="2_en34j"]
 [ext_resource type="PackedScene" uid="uid://0avgfig1k8j8" path="res://examples_fsm/celeste/art/dust.tscn" id="3_058ex"]
-[ext_resource type="Script" path="res://NbFSM/Chart.gd" id="3_xsada"]
-[ext_resource type="Script" path="res://NbFSM/FSM.gd" id="4_i2syy"]
-[ext_resource type="Script" path="res://NbFSM/State.gd" id="5_ycp1b"]
-[ext_resource type="Script" path="res://NbFSM/Transition.gd" id="6_x4ifb"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/Chart.gd" id="3_xsada"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/FSM.gd" id="4_i2syy"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/State.gd" id="5_ycp1b"]
+[ext_resource type="Script" path="res://addons/NbSimpleFSM/Transition.gd" id="6_x4ifb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j3phj"]
 size = Vector2(20, 32)
@@ -392,9 +392,11 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_kbpe6")
+}
 tree_root = SubResource("AnimationNodeStateMachine_hcjlf")
 anim_player = NodePath("../AnimationPlayer")
-active = true
 
 [node name="Label" type="Label" parent="."]
 visible = false
